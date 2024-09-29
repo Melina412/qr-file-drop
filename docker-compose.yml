@@ -1,0 +1,36 @@
+services:
+  database:
+    image: mongo:latest
+    container_name: qrfiledrop_db
+    networks:
+      - backend
+    volumes:
+      - mongodata:/data/db
+  backend:
+    build: ./backend
+    container_name: qrfiledrop_server
+    ports:
+      - $BACKENDPORT:3000
+    networks:
+      - backend
+      - frontend
+    environment:
+      - MONGODB_URI=$MONGODB
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - database
+  frontend:
+    build: ./frontend
+    container_name: qrfiledrop_vite
+    ports:
+      - $FRONTENDPORT:5173
+    networks:
+      - frontend
+    volumes:
+      - ./frontend:/app
+networks:
+  backend:
+  frontend:
+volumes:
+  mongodata:
