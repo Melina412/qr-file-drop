@@ -20,6 +20,7 @@ export function createHash(password: string, salt: string) {
   hmac.update(password);
   return hmac.digest('hex');
 }
+// createHash('password2', 'anothersalt');
 
 export function createSalt() {
   return randomBytes(12).toString('hex');
@@ -31,3 +32,5 @@ export function createSecret() {
   console.log('new secret created:', `JWT_SECRET=${secret}`);
 }
 // createSecret();
+//84ec44c7d6fc41917953a1dafca3c7d7856f7a9d0328b991b76f0d36be1224b9
+// console.log(randomBytes(12));
