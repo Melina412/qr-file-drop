@@ -9,5 +9,5 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*", "app.ts"]
+  "include": ["src/**/*", "app.ts", "tests/**/*"]
 }
