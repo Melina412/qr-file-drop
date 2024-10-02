@@ -3,7 +3,7 @@ import { createSalt, createHash, createToken } from './auth.service';
 import { Request, Response } from 'express';
 
 export async function register(req: Request, res: Response): Promise<void> {
-  console.log('req.body ', req.body);
+  // console.log('req.body ', req.body);
   const { email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
@@ -37,12 +37,12 @@ export async function login(req: Request, res: Response): Promise<void> {
     const user = await User.findOne({ email });
     // console.log({ user });
     if (!user) {
-      res.status(401).json({ message: 'login failed' });
+      res.status(401).json({ success: false, message: 'login failed' });
       return;
     }
 
     if (user.password !== createHash(password, user.salt)) {
-      res.status(401).json({ message: 'login failed' });
+      res.status(401).json({ success: false, message: 'login failed' });
       return;
     }
 
@@ -65,11 +65,10 @@ export async function login(req: Request, res: Response): Promise<void> {
     });
 
     res.json({
+      success: true,
       message: 'login successful',
       data: { email: user.email },
     });
-
-    // res.end();
   } catch (error) {
     console.error(error);
     res.status(500).end();
@@ -79,7 +78,7 @@ export async function login(req: Request, res: Response): Promise<void> {
 export function logout(req: Request, res: Response): void {
   res.clearCookie('accessCookie');
   res.clearCookie('refreshCookie');
-  res.json({ message: 'logout successful' });
+  res.json({ success: true, message: 'logout successful' });
 }
 
 export function protector(req: Request, res: Response): void {
