@@ -6,6 +6,8 @@ import app from '../../app';
 import { User } from '../../src/users/user.model';
 import { createSalt, createHash } from '../../src/auth/auth.service';
 
+process.env.JWT_SECRET = 'secret';
+
 //$ ----- POST /api/auth/register -----
 describe('POST /api/auth/register', () => {
   it('should save a new user to the database', async () => {
