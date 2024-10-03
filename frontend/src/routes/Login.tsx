@@ -19,6 +19,7 @@ function Login({ setLogin }: LoginProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(user),
+        credentials: 'include',
       });
 
       if (res.ok) {

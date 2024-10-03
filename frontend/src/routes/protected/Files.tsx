@@ -1,5 +1,9 @@
-function FilesProtector() {
-  return <></>;
+function Files() {
+  return (
+    <>
+      <h1>Files</h1>
+    </>
+  );
 }
 
-export default FilesProtector;
+export default Files;

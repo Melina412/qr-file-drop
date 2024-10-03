@@ -55,12 +55,12 @@ export async function login(req: Request, res: Response): Promise<void> {
       .cookie('accessCookie', accessToken, {
         httpOnly: true,
         secure: true, //! secure für safari test rausnehmen
-        //   sameSite: 'None',
+        // sameSite: 'none',
       })
       .cookie('refreshCookie', refreshToken, {
         httpOnly: true,
         secure: true,
-        //   sameSite: 'None',
+        // sameSite: 'none',
       })
       .json({
         success: true,
@@ -80,4 +80,14 @@ export function logout(req: Request, res: Response): void {
 export function protector(req: Request, res: Response): void {
   const payload = req.payload;
   res.json(payload.exp);
+}
+
+export async function verify(req: Request, res: Response): Promise<void> {
+  // der eingegebene code soll in der db mit einem gehashten code abgeglichen werden
+  // wenn korrekt wird ein access token für die files erstellt
+  res.end();
+}
+
+export async function refresh(req: Request, res: Response): Promise<void> {
+  res.end();
 }
