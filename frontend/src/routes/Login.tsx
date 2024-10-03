@@ -1,9 +1,9 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
+import type { LoginProps } from '../types';
 
-function Login() {
+function Login({ setLogin }: LoginProps) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [login, setLogin] = useState(false);
 
   async function userLogin() {
     const user = {
@@ -19,7 +19,6 @@ function Login() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(user),
-        credentials: 'include', //! brauche ich glaube ich nicht hier?????
       });
 
       if (res.ok) {
@@ -36,7 +35,6 @@ function Login() {
       console.error(error);
     }
   }
-  console.log({ login });
   return (
     <>
       <div>

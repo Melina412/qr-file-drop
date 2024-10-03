@@ -6,39 +6,26 @@ import app from '../../app';
 import { User } from '../../src/users/user.model';
 import { createSalt, createHash } from '../../src/auth/auth.service';
 
+//$ ----- POST /api/auth/register -----
 describe('POST /api/auth/register', () => {
   it('should save a new user to the database', async () => {
     const res = await request(app)
       .post('/api/auth/register')
-      .send({ email: 'testuser@example.com', password: 'testpassword' });
+      .send({ email: 'newuser@example.com', password: 'testpassword' });
     // console.log(res.body);
 
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('success', true);
     expect(res.body).toHaveProperty('message', 'user created');
 
-    const user = await User.findOne({ email: 'testuser@example.com' });
+    const user = await User.findOne({ email: 'newuser@example.com' });
     expect(user).not.toBeNull();
-    expect(user?.email).toBe('testuser@example.com');
+    expect(user?.email).toBe('newuser@example.com');
   });
 });
 
+//$ ----- POST /api/auth/login -----
 describe('POST /api/auth/login', () => {
-  beforeEach(async () => {
-    const salt = createSalt();
-    const hashedPassword = createHash('testpassword', salt);
-
-    await User.create({
-      email: 'testuser@example.com',
-      password: hashedPassword,
-      salt: salt,
-    });
-  });
-
-  afterEach(async () => {
-    await User.deleteMany({});
-  });
-
   it('should login a user and set cookies', async () => {
     const res = await request(app)
       .post('/api/auth/login')
@@ -50,6 +37,7 @@ describe('POST /api/auth/login', () => {
 
     // ts hat probleme string in string[] zu konvertieren, dieser schritt ist also notwendig
     let cookies = res.headers['set-cookie'] as unknown;
+    // console.log('cookies', cookies);
 
     // unknown zu string[] konvertieren wenn beide cookies in einem string sind
     if (typeof cookies === 'string') {
@@ -88,5 +76,52 @@ describe('POST /api/auth/login', () => {
     expect(res.status).toBe(401);
     expect(res.body).toHaveProperty('success', false);
     expect(res.body).toHaveProperty('message', 'login failed');
+  });
+});
+
+//$ ----- GET /api/auth/logout -----
+describe('GET /api/auth/logout', () => {
+  it('should clear cookies on logout', async () => {
+    // try { //! zum debuggen try/catch damit test bei error nicht abbricht
+    const loginResponse = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'testuser@example.com', password: 'testpassword' });
+
+    // console.log('loginResponse body:', loginResponse.body);
+    // console.log('set-cookie:', loginResponse.headers['set-cookie']);
+
+    expect(loginResponse.statusCode).toBe(200);
+    expect(loginResponse.body).toHaveProperty('success', true);
+
+    const logoutResponse = await request(app)
+      .get('/api/auth/logout')
+      .set('Cookie', loginResponse.headers['set-cookie']); // cookies vom login response nehmen
+
+    // console.log('Logout response:', logoutResponse.body);
+
+    expect(logoutResponse.statusCode).toBe(200);
+    expect(logoutResponse.body).toHaveProperty('success', true);
+
+    // hier geht das mit dem unknown dann aber nicht
+    let cookies = logoutResponse.headers['set-cookie'] as string | string[] | undefined;
+    // console.log('cookies', cookies);
+
+    if (typeof cookies === 'string') {
+      cookies = [cookies];
+    }
+
+    expect(cookies).toBeDefined();
+
+    const accessCookie = cookies.find((cookie: string) => cookie.startsWith('accessCookie='));
+    const refreshCookie = cookies.find((cookie: string) => cookie.startsWith('refreshCookie='));
+
+    expect(accessCookie).toMatch(/accessCookie=;/);
+    expect(refreshCookie).toMatch(/refreshCookie=;/);
+
+    expect(accessCookie).toMatch(/Expires=Thu, 01 Jan 1970/);
+    expect(refreshCookie).toMatch(/Expires=Thu, 01 Jan 1970/);
+    // } catch (error) {
+    // console.error('Error during logout test:', error);
+    // }
   });
 });

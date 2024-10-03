@@ -50,25 +50,23 @@ export async function login(req: Request, res: Response): Promise<void> {
     const accessToken = createToken(payload, '1h');
     const refreshToken = createToken(payload, '24h');
 
-    //# cookie -----------------------------------------------------------
-    res.cookie('accessCookie', accessToken, {
-      httpOnly: true,
-      secure: true, //! secure für safari test rausnehmen
-      //   sameSite: 'None',
-    });
-
-    //# cookie -----------------------------------------------------------
-    res.cookie('refreshCookie', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      //   sameSite: 'None',
-    });
-
-    res.json({
-      success: true,
-      message: 'login successful',
-      data: { email: user.email },
-    });
+    //# cookies -----------------------------------------------------------
+    res
+      .cookie('accessCookie', accessToken, {
+        httpOnly: true,
+        secure: true, //! secure für safari test rausnehmen
+        //   sameSite: 'None',
+      })
+      .cookie('refreshCookie', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        //   sameSite: 'None',
+      })
+      .json({
+        success: true,
+        message: 'login successful',
+        data: { email: user.email },
+      });
   } catch (error) {
     console.error(error);
     res.status(500).end();
@@ -76,9 +74,7 @@ export async function login(req: Request, res: Response): Promise<void> {
 }
 
 export function logout(req: Request, res: Response): void {
-  res.clearCookie('accessCookie');
-  res.clearCookie('refreshCookie');
-  res.json({ success: true, message: 'logout successful' });
+  res.clearCookie('accessCookie').clearCookie('refreshCookie').json({ success: true, message: 'logout successful' });
 }
 
 export function protector(req: Request, res: Response): void {

@@ -4,5 +4,6 @@ export default defineConfig({
   test: {
     include: ['**/*.test.ts'],
     setupFiles: ['./tests/integration/db.setup.ts'],
+    silent: false,
   },
 });
