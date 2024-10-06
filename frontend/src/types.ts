@@ -6,3 +6,5 @@ export interface LoginProps {
 export interface LogoutProps {
   setLogin: Dispatch<SetStateAction<boolean>>;
 }
+
+export type QrCodeData = { dataURL: string; expiresAt: number } | null;

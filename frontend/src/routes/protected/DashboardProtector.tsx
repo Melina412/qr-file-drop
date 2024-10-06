@@ -5,7 +5,7 @@ function DashboardProtector() {
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // console.log({ authorized }, { loading });
+  console.log({ authorized }, { loading });
 
   //$ refreshToken() ---------------------------------------------------
 
@@ -79,7 +79,9 @@ function DashboardProtector() {
     );
   }
 
-  return <Outlet />;
+  if (authorized) {
+    return <Outlet />;
+  }
 }
 
 export default DashboardProtector;
