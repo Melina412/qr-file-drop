@@ -25,7 +25,7 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/qr-code/:id' element={<QrCode />} />
             <Route element={<DashboardProtector />}>
-              <Route path='/admin' element={<AdminDashboard />} />
+              <Route path='/admin' element={<AdminDashboard setLogin={setLogin} />} />
             </Route>
             <Route element={<FilesProtector />}>
               <Route path='/files/:id' element={<Files />} />

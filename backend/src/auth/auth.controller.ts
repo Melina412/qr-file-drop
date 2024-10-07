@@ -78,8 +78,11 @@ export function logout(req: Request, res: Response): void {
 }
 
 export function protector(req: Request, res: Response): void {
-  const payload = req.payload;
-  res.json(payload.exp);
+  const exp = req.payload.exp;
+  const expDate = new Date(exp * 1000);
+  console.log('token exp: ', expDate.toLocaleString('de-DE', { timeZone: 'Europe/Berlin' }));
+
+  res.json(exp);
 }
 
 export async function verify(req: Request, res: Response): Promise<void> {
@@ -89,5 +92,32 @@ export async function verify(req: Request, res: Response): Promise<void> {
 }
 
 export async function refresh(req: Request, res: Response): Promise<void> {
-  res.end();
+  const { email } = req.payload;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.status(401).json({ success: false, message: 'user not found' });
+      return;
+    }
+
+    const payload = { user: user._id, email: user.email };
+    const accessToken = createToken(payload, '1h');
+
+    //# cookies -----------------------------------------------------------
+    res
+      .cookie('accessCookie', accessToken, {
+        httpOnly: true,
+        secure: true, //! secure für safari test rausnehmen
+        // sameSite: 'none',
+      })
+      .json({
+        success: true,
+        message: 'refresh successful',
+        data: { email: user.email },
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(500).end();
+  }
 }

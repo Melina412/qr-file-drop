@@ -1,9 +1,12 @@
 import { useRef } from 'react';
 import type { LoginProps } from '../types';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Login({ setLogin }: LoginProps) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+
+  const navigate = useNavigate();
 
   async function userLogin() {
     const user = {
@@ -28,6 +31,7 @@ function Login({ setLogin }: LoginProps) {
           passwordRef.current.value = '';
         }
         setLogin(true);
+        navigate('/admin');
       }
 
       const response = await res.json();
@@ -79,6 +83,14 @@ function Login({ setLogin }: LoginProps) {
               Login
             </button>
           </div>
+        </div>
+        <div className='flex justify-center'>
+          <p>
+            No account yet?{' '}
+            <Link to={'/register'} className='link link-info'>
+              Register now!
+            </Link>
+          </p>
         </div>
       </main>
     </>

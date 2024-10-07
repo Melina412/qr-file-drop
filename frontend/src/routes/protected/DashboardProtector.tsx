@@ -44,8 +44,9 @@ function DashboardProtector() {
           const exp = await response.json();
           const now = Date.now();
           const expDate = exp * 1000;
-          // console.log(now);
-          // console.log(expDate);
+          // console.log(new Date(now).toLocaleString('de-DE'));
+          // console.log(new Date(expDate).toLocaleString('de-DE'));
+
           if (exp && expDate < now) {
             console.log('access token expired, refreshing...');
             setLoading(true);
@@ -79,9 +80,7 @@ function DashboardProtector() {
     );
   }
 
-  if (authorized) {
-    return <Outlet />;
-  }
+  return <Outlet />;
 }
 
 export default DashboardProtector;
