@@ -1,6 +1,7 @@
-import { User } from '../users/user.model';
-import { createSalt, createHash, createToken } from './auth.service';
 import { Request, Response } from 'express';
+import { createSalt, createHash, createToken } from './auth.service';
+import { User } from '../users/user.model';
+import { Qrcode } from '../qrcodes/qrcode.model';
 
 export async function register(req: Request, res: Response): Promise<void> {
   // console.log('req.body ', req.body);
@@ -78,16 +79,78 @@ export function logout(req: Request, res: Response): void {
 }
 
 export function protector(req: Request, res: Response): void {
-  const payload = req.payload;
-  res.json(payload.exp);
-}
+  const exp = req.payload.exp;
+  const expDate = new Date(exp * 1000);
+  console.log('token exp: ', expDate.toLocaleString('de-DE', { timeZone: 'Europe/Berlin' }));
 
-export async function verify(req: Request, res: Response): Promise<void> {
-  // der eingegebene code soll in der db mit einem gehashten code abgeglichen werden
-  // wenn korrekt wird ein access token für die files erstellt
-  res.end();
+  res.json(exp);
 }
 
 export async function refresh(req: Request, res: Response): Promise<void> {
-  res.end();
+  const { email } = req.payload;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.status(401).json({ success: false, message: 'user not found' });
+      return;
+    }
+
+    const payload = { user: user._id, email: user.email };
+    const accessToken = createToken(payload, '1h');
+
+    //# cookies -----------------------------------------------------------
+    res
+      .cookie('accessCookie', accessToken, {
+        httpOnly: true,
+        secure: true, //! secure für safari test rausnehmen
+        // sameSite: 'none',
+      })
+      .json({
+        success: true,
+        message: 'refresh successful',
+        data: { email: user.email },
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(500).end();
+  }
+}
+
+export async function verifyPin(req: Request, res: Response): Promise<void> {
+  const { slug, pin } = req.body;
+  // const { pin } = req.body;
+  console.log({ slug, pin });
+
+  try {
+    const qrcode = await Qrcode.findOne({ slug });
+    if (!qrcode) {
+      res.status(404).json({ success: false, message: 'qrcode not found' });
+      return;
+    }
+    // console.log({ qrcode });
+
+    const enteredPin = createHash(pin, qrcode.salt);
+    console.log('enteredPin', enteredPin);
+    console.log('qrcode.pin', qrcode.pin);
+
+    if (enteredPin === qrcode.pin) {
+      const payload = { slug: slug, user_id: qrcode.user, scannedBy: qrcode.scannedBy };
+      const qrCodeToken = createToken(payload, '30min');
+      //# cookies -----------------------------------------------------------
+      res
+        .status(200)
+        .cookie('qrCodeCookie', qrCodeToken, {
+          httpOnly: true,
+          secure: true, //! secure für safari test rausnehmen
+          // sameSite: 'none',
+        })
+        .json({ success: true, message: 'pin correct', data: { user_id: qrcode.user, scannedBy: qrcode.scannedBy } });
+    } else {
+      res.status(404).json({ success: false, message: 'something went wrong' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'something went wrong' });
+  }
 }

@@ -5,7 +5,7 @@ function DashboardProtector() {
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // console.log({ authorized }, { loading });
+  console.log({ authorized }, { loading });
 
   //$ refreshToken() ---------------------------------------------------
 
@@ -44,8 +44,9 @@ function DashboardProtector() {
           const exp = await response.json();
           const now = Date.now();
           const expDate = exp * 1000;
-          // console.log(now);
-          // console.log(expDate);
+          // console.log(new Date(now).toLocaleString('de-DE'));
+          // console.log(new Date(expDate).toLocaleString('de-DE'));
+
           if (exp && expDate < now) {
             console.log('access token expired, refreshing...');
             setLoading(true);
@@ -64,8 +65,6 @@ function DashboardProtector() {
     checkToken();
   }, []);
 
-  // -----------------------------------------------------------------------
-
   if (!authorized && !loading) {
     return <Navigate to={'/login'} />;
   }
@@ -73,7 +72,7 @@ function DashboardProtector() {
     return (
       <main>
         <div>
-          <span>loading...</span>
+          <span className='loading loading-spinner text-secondary'></span>
         </div>
       </main>
     );

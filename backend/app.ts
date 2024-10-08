@@ -6,6 +6,7 @@ import 'dotenv/config';
 
 import { router as authRouter } from './src/auth/auth.router';
 import { router as userRouter } from './src/users/user.router';
+import { router as qrcodeRouter } from './src/qrcodes/qrcode.router';
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.use(morgan('dev'));
 
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
+app.use('/api/qrcode', qrcodeRouter);
 
 export default app;

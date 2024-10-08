@@ -1,5 +1,7 @@
 import type { LogoutProps } from '../types';
+import { useNavigate } from 'react-router-dom';
 function Logout({ setLogin }: LogoutProps) {
+  const navigate = useNavigate();
   async function userLogout() {
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/api/auth/logout`, {
@@ -9,6 +11,7 @@ function Logout({ setLogin }: LogoutProps) {
 
       if (res.ok) {
         setLogin(false);
+        navigate('/login');
       }
 
       const response = await res.json();
@@ -21,7 +24,9 @@ function Logout({ setLogin }: LogoutProps) {
   return (
     <>
       <div>
-        <button onClick={() => userLogout()}>Logout</button>
+        <button className='btn btn-warning btn-outline' onClick={() => userLogout()}>
+          Logout
+        </button>
       </div>
     </>
   );

@@ -1,9 +1,14 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import type { LoginProps } from '../types';
+import { useNavigate, Link } from 'react-router-dom';
+import type { ResponseType } from '../types';
 
 function Login({ setLogin }: LoginProps) {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+
+  const navigate = useNavigate();
+  const [loginResponse, setLoginResponse] = useState<ResponseType>(null);
 
   async function userLogin() {
     const user = {
@@ -28,10 +33,11 @@ function Login({ setLogin }: LoginProps) {
           passwordRef.current.value = '';
         }
         setLogin(true);
+        navigate('/admin');
       }
 
       const response = await res.json();
-      console.log(response.message);
+      setLoginResponse(response);
     } catch (error) {
       console.error(error);
     }
@@ -75,10 +81,21 @@ function Login({ setLogin }: LoginProps) {
             />
           </label>
           <div>
+            <p className='text-error'>{loginResponse?.message}</p>
+          </div>
+          <div>
             <button className='btn btn-outline mt-5' onClick={() => userLogin()}>
               Login
             </button>
           </div>
+        </div>
+        <div className='flex justify-center'>
+          <p>
+            No account yet?{' '}
+            <Link to={'/register'} className='link link-info'>
+              Register now!
+            </Link>
+          </p>
         </div>
       </main>
     </>

@@ -1,4 +1,4 @@
 import express, { RequestHandler } from 'express';
-import { checkAccessToken } from '../middleware/auth.middleware';
+import { checkToken } from '../middleware/auth.middleware';
 
 export const router = express.Router();
