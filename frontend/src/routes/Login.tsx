@@ -33,7 +33,7 @@ function Login({ setLogin }: LoginProps) {
           passwordRef.current.value = '';
         }
         setLogin(true);
-        navigate('/admin');
+        navigate('/user');
       }
 
       const response = await res.json();

@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 export const verifyTemplate = (email: string, pin: string) => {
   return {
-    from: `"QrFileDrop admin" <${process.env.GMAIL_USER}>`,
+    from: `"QRFileDrop admin" <${process.env.GMAIL_USER}>`,
     to: email,
     subject: 'Verify your email',
     text: `
@@ -21,22 +21,23 @@ export const verifyTemplate = (email: string, pin: string) => {
         </div>`,
   };
 };
-export const filesTemplate = (email: string) => {
+export const filesTemplate = (email: string, fileName: string, fileURL: string) => {
   return {
-    from: `"QrFileDrop admin" <${process.env.GMAIL_USER}>`,
+    from: `"QRFileDrop admin" <${process.env.GMAIL_USER}>`,
     to: email,
-    subject: 'Files',
+    subject: 'QR code files',
     text: `
-        Hi! Here are the qrcode files.`,
+        Hi! Here are the QR code files. Thanks for using QRFileDrop <3.`,
     html: `
         <div style='font-family: system-ui, -apple-system, sans-serif, Arial'>
-        <h2>Hi!</h2>
-        <p>Here are the qrcode files.</p>
+        <p>Hi!</p>
+        <p>Here are the QR code files.</p>
+        <p style='margin-top:20px'>Thanks for using QRFileDrop <3.</p>
         </div>`,
     attachments: [
       {
-        filename: 'document.pdf',
-        path: '/path/to/document.pdf',
+        filename: `${fileName}`,
+        path: `${fileURL}`,
       },
     ],
   };
