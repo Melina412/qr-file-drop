@@ -7,10 +7,11 @@ import Landingpage from './routes/Landingpage';
 import Login from './routes/Login';
 import Register from './routes/Register';
 import DashboardProtector from './routes/protected/DashboardProtector';
-import AdminDashboard from './routes/protected/AdminDasboard';
+import UserDashboard from './routes/protected/UserDasboard';
 import FilesProtector from './routes/protected/FilesProtector';
 import Files from './routes/protected/Files';
 import QrCode from './routes/QrCode';
+import NotFound from './routes/NotFound';
 
 function App() {
   const [login, setLogin] = useState(false);
@@ -25,11 +26,12 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/qr-code/:id' element={<QrCode />} />
             <Route element={<DashboardProtector />}>
-              <Route path='/admin' element={<AdminDashboard setLogin={setLogin} />} />
+              <Route path='/user' element={<UserDashboard setLogin={setLogin} />} />
             </Route>
             <Route element={<FilesProtector />}>
-              <Route path='/files/:id' element={<Files />} />
+              <Route path='/files' element={<Files />} />
             </Route>
+            <Route path='*' element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </ErrorBoundary>

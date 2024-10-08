@@ -6,6 +6,10 @@ const qrcodeSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+  },
   slug: {
     type: String,
     required: true,
@@ -13,12 +17,21 @@ const qrcodeSchema = new mongoose.Schema({
   },
   pin: {
     type: String,
-    required: true,
   },
   salt: {
     type: String,
   },
   expiresAt: {
+    type: Date,
+  },
+  scanned: {
+    type: Boolean,
+    default: false,
+  },
+  scannedBy: {
+    type: String,
+  },
+  scannedAt: {
     type: Date,
   },
 });

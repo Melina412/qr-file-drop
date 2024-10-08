@@ -30,3 +30,10 @@ export function createSecret() {
   const secret = randomBytes(12).toString('hex');
   console.log('new secret created:', `JWT_SECRET=${secret}`);
 }
+
+export function createNumericalCode(digits: number) {
+  const bytes = randomBytes(Math.ceil(digits / 2));
+  const code = parseInt(bytes.toString('hex'), 16).toString().slice(0, digits);
+  // console.log({ code });
+  return code;
+}

@@ -13,6 +13,14 @@ const userSchema = new mongoose.Schema({
   salt: {
     type: String,
   },
+  displayName: {
+    type: String,
+  },
+  files: [
+    {
+      type: String,
+    },
+  ],
 });
 
 export const User = mongoose.model('user', userSchema);

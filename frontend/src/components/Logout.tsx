@@ -24,7 +24,7 @@ function Logout({ setLogin }: LogoutProps) {
   return (
     <>
       <div>
-        <button className='btn btn-outline mt-5' onClick={() => userLogout()}>
+        <button className='btn btn-warning btn-outline' onClick={() => userLogout()}>
           Logout
         </button>
       </div>

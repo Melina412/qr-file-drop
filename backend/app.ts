@@ -6,7 +6,7 @@ import 'dotenv/config';
 
 import { router as authRouter } from './src/auth/auth.router';
 import { router as userRouter } from './src/users/user.router';
-import { router as qrcodeRouter } from './src/qrcode/qrcode.router';
+import { router as qrcodeRouter } from './src/qrcodes/qrcode.router';
 
 const app = express();
 

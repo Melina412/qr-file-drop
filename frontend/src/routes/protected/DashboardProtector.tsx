@@ -65,8 +65,6 @@ function DashboardProtector() {
     checkToken();
   }, []);
 
-  // -----------------------------------------------------------------------
-
   if (!authorized && !loading) {
     return <Navigate to={'/login'} />;
   }
@@ -74,7 +72,7 @@ function DashboardProtector() {
     return (
       <main>
         <div>
-          <span>loading...</span>
+          <span className='loading loading-spinner text-secondary'></span>
         </div>
       </main>
     );
