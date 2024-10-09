@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react';
 import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [registered, setRegistered] = useState(false);
+  const navigate = useNavigate();
 
   async function register() {
     const user = {
@@ -28,6 +30,7 @@ function Register() {
           passwordRef.current.value = '';
         }
         setRegistered(true);
+        navigate('/login');
       }
 
       const response = await res.json();

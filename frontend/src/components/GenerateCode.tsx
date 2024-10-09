@@ -12,7 +12,7 @@ function GenerateCode() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ count: 1, pincode: true, expiresIn: 60 }),
+      body: JSON.stringify({ count: 1, pincode: true, expiresIn: 60 * 24 }),
       credentials: 'include',
     });
 
@@ -24,7 +24,7 @@ function GenerateCode() {
 
   return (
     <>
-      <section>
+      <section className='mb-48'>
         <div className='flex flex-col justify-center items-center gap-4 mx-5 my-10'>
           <button className='btn btn-outline' onClick={() => generateQrCOde()}>
             Generate QR-Code

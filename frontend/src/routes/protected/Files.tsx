@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 
 function Files() {
-  const [response, setResponse] = useState<ResponseType>(null);
+  const [fileResponse, setFileResponse] = useState<ResponseType>(null);
+  const [mailResponse, setMailResponse] = useState<ResponseType>(null);
   const [file, setFile] = useState<File | null>(null);
   console.log({ file });
-  console.log({ response });
+  console.log({ fileResponse });
+  console.log({ mailResponse });
 
   async function getFile() {
     const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/api/qrcode/file`, {
@@ -16,7 +18,7 @@ function Files() {
     });
     const response = await res.json();
 
-    setResponse(response);
+    setFileResponse(response);
     setFile(response.data.files[0]);
   }
 
@@ -35,6 +37,10 @@ function Files() {
       });
       const response = await res.json();
       console.log(response);
+
+      if (res.ok) {
+        setMailResponse(response);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -55,15 +61,25 @@ function Files() {
                 className='link link-accent link-hover'>
                 CV.pdf
               </Link>
+              {/* download name muss ggf. im be festgelegt werden, sonst ist hier trotzdem die cloudinary id */}
             </li>
           </ul>
-
-          <p>
-            or send them via email to <span className='text-accent'>{response?.data.email}</span>{' '}
-          </p>
-          <button className='btn btn-accent btn-outline' onClick={() => sendFile()}>
-            Send Email
-          </button>
+          <div className='flex flex-col justify-center items-center'>
+            {!mailResponse?.success === true ? (
+              <div className='mb-5'>
+                <p className='mb-3'>
+                  or send them via email to <span className='text-accent'>{fileResponse?.data.email}</span>{' '}
+                </p>
+                <button className='btn btn-accent btn-outline' onClick={() => sendFile()}>
+                  Send Email
+                </button>
+              </div>
+            ) : (
+              <div>
+                <p>{mailResponse?.message}</p>
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </>
