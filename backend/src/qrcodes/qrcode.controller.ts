@@ -24,7 +24,7 @@ export async function createQrcode(req: Request, res: Response): Promise<void> {
   const expiresAt = Date.now() + expiresIn * 60 * 1000;
 
   try {
-    const dataURL = await QrCode.toDataURL(`http://192.168.1.9:9999/qr-code/${slug}`, {
+    const dataURL = await QrCode.toDataURL(`https://qr-file-drop.onrender.com/qr-code/${slug}`, {
       width: 300,
     });
 
