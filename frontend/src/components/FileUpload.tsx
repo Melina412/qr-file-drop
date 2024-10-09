@@ -42,11 +42,15 @@ function FileUpload() {
     <>
       <section className='flex flex-col justify-center items-center gap-4 mx-5 my-10'>
         <form onSubmit={uploadFile} className='flex flex-col justify-center items-center gap-4 mx-5 my-10'>
-          <div className='m-auto'>
-            <label htmlFor='file' id='file-label'>
-              Select file for upload
-            </label>
-            <input type='file' id='file' name='file' onChange={handleFileChange} />
+          <div className='m-auto gap-2'>
+            <h2 className='text-2xl mb-5'>File Upload</h2>
+            <input
+              type='file'
+              id='file'
+              name='file'
+              onChange={handleFileChange}
+              className='file-input file-input-bordered file-input-accent w-full max-w-xs mb-3'
+            />
             <label className='input input-bordered flex items-center gap-2'>
               File Name
               <input type='text' name='fileName' className='grow' onChange={(e) => setFileName(e.target.value)} />
@@ -61,14 +65,16 @@ function FileUpload() {
             </button>
           </div>
         </form>
-        <div>
-          <p>file preview:</p>
-          <Link to={`${fileResponse?.data.fileURL}?attachment=false`} target='_blank' className='link link-info'>
-            download
-          </Link>
-          <button className='btn btn-outline' onClick={() => window.open(`${fileResponse?.data.fileURL}`, '_blank')}>
-            preview
-          </button>
+        <div className='flex flex-col justify-center items-center gap-4 mx-5 my-10'>
+          <h2 className='text-2xl mb-5'>File Preview</h2>
+          <div className='buttons flex gap-2 justify-center items-center'>
+            <Link to={`${fileResponse?.data.fileURL}?attachment=false`} target='_blank' className='link link-info'>
+              download
+            </Link>
+            <button className='btn btn-outline' onClick={() => window.open(`${fileResponse?.data.fileURL}`, '_blank')}>
+              preview
+            </button>
+          </div>
         </div>
       </section>
     </>

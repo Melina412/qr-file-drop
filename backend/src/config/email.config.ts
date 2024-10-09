@@ -1,24 +1,26 @@
 import 'dotenv/config';
 import nodemailer from 'nodemailer';
 
-// const transport = nodemailer.createTransport({
-//   host: 'smtp.gmail.com',
-//   port: 587,
-//   secure: false,
-//   auth: {
-//     user: process.env.GMAIL_USER,
-//     pass: process.env.GMAIL_PW,
-//   },
-// });
-
+// $ GMAIL ---- production
 const transport = nodemailer.createTransport({
-  host: 'sandbox.smtp.mailtrap.io',
-  port: 2525,
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
   auth: {
-    user: process.env.MAILTRAP_USER,
-    pass: process.env.MAILTRAP_PW,
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PW,
   },
 });
+
+// $ MAILTRAP ---- development
+// const transport = nodemailer.createTransport({
+//   host: 'sandbox.smtp.mailtrap.io',
+//   port: 2525,
+//   auth: {
+//     user: process.env.MAILTRAP_USER,
+//     pass: process.env.MAILTRAP_PW,
+//   },
+// });
 
 interface EmailTemplate {
   from: string;
