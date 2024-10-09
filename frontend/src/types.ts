@@ -34,3 +34,8 @@ export interface VerifyPinProps {
 export type QrCodeData = { dataURL: string; expiresAt: number; slug: string } | null;
 
 export type ResponseType = { success: boolean; message: string; data?: any } | null;
+
+export type File = {
+  fileURL: string;
+  fileID: string;
+};

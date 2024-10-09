@@ -5,6 +5,7 @@ import VerifyEmail from '../components/VerifyEmail';
 import VerifyPin from '../components/VerifyPin';
 
 import type { ResponseType } from '../types';
+import Header from '../components/Header';
 
 function QrCode() {
   const params = useParams();
@@ -20,10 +21,8 @@ function QrCode() {
 
   return (
     <>
+      <Header />
       <main className='text-center m-auto'>
-        <h1>
-          Welcome to <span className='text-accent'>QRFileShare</span>, a secure platform to share confidential files.
-        </h1>
         {loading && (
           <VerifyCode
             verified={verified}

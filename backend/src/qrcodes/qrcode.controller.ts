@@ -4,7 +4,7 @@ import QrCode from 'qrcode';
 import { v4 } from 'uuid';
 import { createSalt, createHash, createNumericalCode } from '../auth/auth.service';
 import { sendEmail } from '../config/email.config';
-import { verifyTemplate } from '../templates/email.template';
+import { verifyTemplate, filesTemplate } from '../templates/email.template';
 import { User } from '../users/user.model';
 
 export async function createQrcode(req: Request, res: Response): Promise<void> {
@@ -118,6 +118,56 @@ export async function verifyEmail(req: Request, res: Response): Promise<void> {
         res.status(200).json({ success: true, message: 'qr code updated and email sent successfully' });
       }
     }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'something went wrong' });
+  }
+}
+
+export async function getFile(req: Request, res: Response): Promise<void> {
+  console.log('payload', req.payload);
+
+  try {
+    const user = await User.findById(req.payload.user_id);
+    console.log({ user });
+
+    if (!user) {
+      res.status(404).json({ success: false, message: 'user not found' });
+      return;
+    }
+    const files = user.files;
+    if (!files) {
+      res.status(404).json({ success: false, message: 'files not found' });
+      return;
+    }
+    res
+      .status(200)
+      .json({ success: true, message: 'files sent', data: { files: files, email: req.payload.scannedBy } });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'something went wrong' });
+  }
+}
+
+export async function sendFiles(req: Request, res: Response): Promise<void> {
+  console.log('payload', req.payload);
+
+  try {
+    const user = await User.findById(req.payload.user_id);
+    console.log({ user });
+
+    if (!user) {
+      res.status(404).json({ success: false, message: 'user not found' });
+      return;
+    }
+    const files = user.files;
+    if (!files) {
+      res.status(404).json({ success: false, message: 'files not found' });
+      return;
+    }
+
+    sendEmail(filesTemplate(req.payload.scannedBy, files[0].fileName, files[0].fileURL));
+    res.status(200).json({ success: true, message: 'files sent' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'something went wrong' });

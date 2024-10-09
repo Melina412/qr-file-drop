@@ -70,7 +70,9 @@ function VerifyCode({ verified, setVerified, setLoading, response, setResponse, 
                 </div>
                 <div className='m-5'>
                   <p>You believe this is a mistake?</p>
-                  <Link to='/contact' className='link link-error'>
+                  <Link
+                    to={`mailto:melina.webdev@gmail.com?subject=error: ${response?.message}`}
+                    className='link link-error'>
                     Contact admin
                   </Link>
                 </div>

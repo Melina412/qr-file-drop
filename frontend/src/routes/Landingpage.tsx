@@ -1,7 +1,12 @@
+import Header from '../components/Header';
+
 function Landingpage() {
   return (
     <>
-      <h1>Landingpage</h1>
+      <Header />
+      <main>
+        <h1>Landingpage</h1>
+      </main>
     </>
   );
 }

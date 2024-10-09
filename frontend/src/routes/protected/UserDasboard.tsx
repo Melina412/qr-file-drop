@@ -1,3 +1,4 @@
+import FileUpload from '../../components/FileUpload';
 import GenerateCode from '../../components/GenerateCode';
 import Logout from '../../components/Logout';
 import type { DashboardProps } from '../../types';
@@ -12,6 +13,7 @@ function UserDashboard({ setLogin }: DashboardProps) {
       </header>
       <main>
         <GenerateCode />
+        <FileUpload />
       </main>
     </>
   );

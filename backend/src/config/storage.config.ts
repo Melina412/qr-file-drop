@@ -24,4 +24,4 @@ cloudinary.v2.config({
   secure: true,
 });
 
-export const uploadFile = multer({ storage: multer.memoryStorage() });
+export const upload = multer({ storage: multer.memoryStorage() });
