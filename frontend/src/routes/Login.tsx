@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import type { LoginProps } from '../types';
 import { useNavigate, Link } from 'react-router-dom';
 import type { ResponseType } from '../types';
+import Header from '../components/Header';
 
 function Login({ setLogin }: LoginProps) {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -44,6 +45,7 @@ function Login({ setLogin }: LoginProps) {
   }
   return (
     <>
+      <Header />
       <main className='text-center m-auto'>
         <h1 className='text-3xl m-5'>Login</h1>
         <div className='flex flex-col justify-center gap-4 mx-5 my-10'>

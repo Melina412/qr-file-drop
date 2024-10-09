@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import type { ResponseType } from '../types';
 import { Link } from 'react-router-dom';

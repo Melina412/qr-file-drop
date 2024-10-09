@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import Header from '../components/Header';
 
 function Register() {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -39,6 +40,7 @@ function Register() {
 
   return (
     <>
+      <Header />
       <main className='text-center m-auto'>
         <h1 className='text-3xl m-5'>Register</h1>
         <div className='flex flex-col justify-center gap-4 mx-5 my-10'>
