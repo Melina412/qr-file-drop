@@ -8,3 +8,7 @@ declare global {
     }
   }
 }
+
+export interface DestroyFileResponse {
+  result: string;
+}

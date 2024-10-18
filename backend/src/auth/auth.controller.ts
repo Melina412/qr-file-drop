@@ -38,12 +38,12 @@ export async function login(req: Request, res: Response): Promise<void> {
     const user = await User.findOne({ email });
     // console.log({ user });
     if (!user) {
-      res.status(401).json({ success: false, message: 'login failed' });
+      res.status(401).json({ success: false, message: 'login failed: wrong login data' });
       return;
     }
 
     if (user.password !== createHash(password, user.salt)) {
-      res.status(401).json({ success: false, message: 'login failed' });
+      res.status(401).json({ success: false, message: 'login failed: wrong login data' });
       return;
     }
 
@@ -81,7 +81,7 @@ export function logout(req: Request, res: Response): void {
 export function protector(req: Request, res: Response): void {
   const exp = req.payload.exp;
   const expDate = new Date(exp * 1000);
-  console.log('token exp: ', expDate.toLocaleString('de-DE', { timeZone: 'Europe/Berlin' }));
+  // console.log('token exp: ', expDate.toLocaleString('de-DE', { timeZone: 'Europe/Berlin' }));
 
   res.json(exp);
 }

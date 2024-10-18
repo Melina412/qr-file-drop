@@ -18,15 +18,11 @@ const userSchema = new mongoose.Schema({
   },
   files: [
     {
-      fileURL: {
-        type: String,
-      },
-      fileID: {
-        type: String,
-      },
-      fileName: {
-        type: String,
-      },
+      fileURL: String,
+      fileID: String,
+      fileName: String,
+      resourceType: String,
+      format: String,
     },
   ],
 });

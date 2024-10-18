@@ -1,16 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
-import type { ResponseType } from '../types';
+import type { ResponseType, FileType } from '../types';
 import { Link } from 'react-router-dom';
+import authFetch from '../utils/authFetch';
 
 function FileUpload() {
-  const [file, setFile] = useState<File | null>(null);
+  const [inputFile, setInputFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>('');
-  const [fileResponse, setFileResponse] = useState<ResponseType>(null);
-  console.log({ fileResponse });
+  const [uploadFileResponse, setUploadFileResponse] = useState<ResponseType>(null);
+  const [getFilesResponse, setGetFilesResponse] = useState<ResponseType>(null);
+  const [deleteFileResponse, setDeleteFileResponse] = useState<ResponseType>(null);
+  console.log({ uploadFileResponse });
+  console.log({ getFilesResponse });
+  console.log({ deleteFileResponse });
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) setFile(e.target.files[0]);
+    if (e.target.files !== null) {
+      console.log(e.target.files);
+      console.log(e.target.files[0]);
+      console.log(e.target);
+    }
+
+    if (e.target.files !== null) setInputFile(e.target.files[0]);
   };
 
   async function uploadFile(e: FormEvent<HTMLFormElement>) {
@@ -20,27 +31,82 @@ function FileUpload() {
     console.log(form);
     // console.log({ form });
 
-    if (file) {
-      form.append('file', file);
+    if (inputFile) {
+      form.append('file', inputFile);
       form.append('fileName', fileName);
-      const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/api/user/file/upload`, {
-        method: 'POST',
-        credentials: 'include',
-        body: form,
-      });
-      const response = await res.json();
-
-      setFileResponse(response);
-      if (res.ok) {
-        console.log(response.message);
-      } else {
-        console.error(response.message);
+      try {
+        const res = await authFetch(`${import.meta.env.VITE_BACKENDURL}/api/user/file/upload`, {
+          method: 'POST',
+          credentials: 'include',
+          body: form,
+        });
+        const response = await res.json();
+        setUploadFileResponse(response);
+      } catch (error) {
+        console.error(error);
       }
     }
   }
+
+  async function deleteFile(file: FileType) {
+    try {
+      const res = await authFetch(`${import.meta.env.VITE_BACKENDURL}/api/user/file`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(file),
+      });
+      const response = await res.json();
+      setDeleteFileResponse(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    async function getUserFiles() {
+      try {
+        const res = await authFetch(`${import.meta.env.VITE_BACKENDURL}/api/user/files`, {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        const response = await res.json();
+        setGetFilesResponse(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getUserFiles();
+  }, [uploadFileResponse, deleteFileResponse]);
+
   return (
     <>
       <section className='flex flex-col justify-center items-center gap-4 mx-5 my-10'>
+        <h2>My Files</h2>
+        <div>
+          <ul>
+            {getFilesResponse?.data.map((file: FileType) => (
+              <li
+                key={file._id}
+                className='grid grid-cols-[3fr_1fr] items-center'
+                style={{ gridTemplateColumns: '3fr 1fr' }}>
+                <p>
+                  {file.fileName}
+                  {!file.fileName.endsWith(`.${file.format}`) && `.${file.format}`}
+                </p>
+                {/* DELETE BUTTON */}
+                <button
+                  onClick={() => deleteFile(file)}
+                  className='btn btn-outline text-red-500 h-6 w-6 min-h-6 min-w-6 pl-0 pr-0'>
+                  x
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
         <form onSubmit={uploadFile} className='flex flex-col justify-center items-center gap-4 mx-5 my-10'>
           <div className='m-auto gap-2'>
             <h2 className='text-2xl mb-5'>File Upload</h2>
@@ -68,10 +134,15 @@ function FileUpload() {
         <div className='flex flex-col justify-center items-center gap-4 mx-5 my-10'>
           <h2 className='text-2xl mb-5'>File Preview</h2>
           <div className='buttons flex gap-2 justify-center items-center'>
-            <Link to={`${fileResponse?.data.fileURL}?attachment=false`} target='_blank' className='link link-info'>
+            <Link
+              to={`${uploadFileResponse?.data.fileURL}?attachment=false`}
+              target='_blank'
+              className='link link-info'>
               download
             </Link>
-            <button className='btn btn-outline' onClick={() => window.open(`${fileResponse?.data.fileURL}`, '_blank')}>
+            <button
+              className='btn btn-outline'
+              onClick={() => window.open(`${uploadFileResponse?.data.fileURL}`, '_blank')}>
               preview
             </button>
           </div>
