@@ -5,6 +5,6 @@ import { addFile, getUserFiles, deleteFile } from './user.controller';
 
 export const router = express.Router();
 
-router.post('/file/upload', checkToken('accessCookie'), upload.single('file'), addFile as RequestHandler);
+router.post('/file', checkToken('accessCookie'), upload.single('file'), addFile as RequestHandler);
 router.get('/files', checkToken('accessCookie'), getUserFiles as RequestHandler);
 router.delete('/file', checkToken('accessCookie'), deleteFile as RequestHandler);

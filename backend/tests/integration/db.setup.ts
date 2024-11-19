@@ -32,8 +32,10 @@ beforeEach(async () => {
     password: hashedPassword,
     salt: salt,
   });
+  // console.log('🔹 testuser created');
 });
 
 afterEach(async () => {
   await User.deleteMany({});
+  // console.log('🔸 testuser deleted');
 });

@@ -4,7 +4,7 @@ import 'dotenv/config';
 
 import app from '../../app';
 import { User } from '../../src/users/user.model';
-import { createSalt, createHash } from '../../src/auth/auth.service';
+import { createSalt, createHash } from '../../src/auth/auth.service'; // muss das drin bleiben??
 
 process.env.JWT_SECRET = 'secret';
 
@@ -39,7 +39,7 @@ describe('POST /api/auth/login', () => {
 
     // ts hat probleme string in string[] zu konvertieren, dieser schritt ist also notwendig
     let cookies = res.headers['set-cookie'] as unknown;
-    // console.log('cookies', cookies);
+    console.log('cookies', cookies);
 
     // unknown zu string[] konvertieren wenn beide cookies in einem string sind
     if (typeof cookies === 'string') {
@@ -67,7 +67,7 @@ describe('POST /api/auth/login', () => {
 
     expect(res.status).toBe(401);
     expect(res.body).toHaveProperty('success', false);
-    expect(res.body).toHaveProperty('message', 'login failed');
+    expect(res.body).toHaveProperty('message', 'login failed: wrong login data');
   });
 
   it('should return 401 if password is incorrect', async () => {
@@ -77,7 +77,7 @@ describe('POST /api/auth/login', () => {
 
     expect(res.status).toBe(401);
     expect(res.body).toHaveProperty('success', false);
-    expect(res.body).toHaveProperty('message', 'login failed');
+    expect(res.body).toHaveProperty('message', 'login failed: wrong login data');
   });
 });
 
@@ -114,8 +114,8 @@ describe('GET /api/auth/logout', () => {
 
     expect(cookies).toBeDefined();
 
-    const accessCookie = cookies.find((cookie: string) => cookie.startsWith('accessCookie='));
-    const refreshCookie = cookies.find((cookie: string) => cookie.startsWith('refreshCookie='));
+    const accessCookie = cookies?.find((cookie: string) => cookie.startsWith('accessCookie='));
+    const refreshCookie = cookies?.find((cookie: string) => cookie.startsWith('refreshCookie='));
 
     expect(accessCookie).toMatch(/accessCookie=;/);
     expect(refreshCookie).toMatch(/refreshCookie=;/);

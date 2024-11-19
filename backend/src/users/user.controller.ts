@@ -25,7 +25,12 @@ export async function getUserFiles(req: Request, res: Response): Promise<void> {
     }
 
     const files = user.files;
-    res.status(200).json({ success: true, message: 'qrcodes found', data: files });
+    console.log({ files });
+
+    files.length === 0
+      ? res.status(200).json({ success: true, message: 'user has no files', data: files })
+      : res.status(200).json({ success: true, message: 'files found', data: files });
+    // bei status 204 kann man keinen json res mitschicken
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'something went wrong' });

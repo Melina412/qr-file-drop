@@ -35,7 +35,7 @@ function FileUpload() {
       form.append('file', inputFile);
       form.append('fileName', fileName);
       try {
-        const res = await authFetch(`${import.meta.env.VITE_BACKENDURL}/api/user/file/upload`, {
+        const res = await authFetch(`${import.meta.env.VITE_BACKENDURL}/api/user/file`, {
           method: 'POST',
           credentials: 'include',
           body: form,
@@ -86,23 +86,33 @@ function FileUpload() {
     <>
       <section className='flex flex-col justify-center items-center gap-4 mx-5 my-10'>
         <h2>My Files</h2>
+        {getFilesResponse?.data.length === 0 && <p>- no files available -</p>}
         <div>
           <ul>
             {getFilesResponse?.data.map((file: FileType) => (
               <li
                 key={file._id}
-                className='grid grid-cols-[3fr_1fr] items-center'
+                className='grid grid-cols-[3fr_1fr] items-center gap-2 mb-2'
                 style={{ gridTemplateColumns: '3fr 1fr' }}>
-                <p>
-                  {file.fileName}
-                  {!file.fileName.endsWith(`.${file.format}`) && `.${file.format}`}
-                </p>
+                <div>
+                  <p>
+                    {file.fileName}
+                    {!file.fileName.endsWith(`.${file.format}`) && `.${file.format}`}
+                  </p>
+                </div>
                 {/* DELETE BUTTON */}
-                <button
-                  onClick={() => deleteFile(file)}
-                  className='btn btn-outline text-red-500 h-6 w-6 min-h-6 min-w-6 pl-0 pr-0'>
-                  x
-                </button>
+                <div>
+                  <button className='btn btn-square btn-outline btn-secondary' onClick={() => deleteFile(file)}>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      className='h-6 w-6'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M6 18L18 6M6 6l12 12' />
+                    </svg>
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
