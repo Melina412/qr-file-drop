@@ -10,9 +10,11 @@ function FileUpload() {
   const [uploadFileResponse, setUploadFileResponse] = useState<ResponseType>(null);
   const [getFilesResponse, setGetFilesResponse] = useState<ResponseType>(null);
   const [deleteFileResponse, setDeleteFileResponse] = useState<ResponseType>(null);
+  const [deleteFolderResponse, setDeleteFolderResponse] = useState<ResponseType>(null);
   console.log({ uploadFileResponse });
   console.log({ getFilesResponse });
   console.log({ deleteFileResponse });
+  console.log({ deleteFolderResponse });
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files !== null) {
@@ -65,6 +67,22 @@ function FileUpload() {
     }
   }
 
+  async function deleteAllFiles() {
+    try {
+      const res = await authFetch(`${import.meta.env.VITE_BACKENDURL}/api/user/folder`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const response = await res.json();
+      setDeleteFolderResponse(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     async function getUserFiles() {
       try {
@@ -80,12 +98,17 @@ function FileUpload() {
       }
     }
     getUserFiles();
-  }, [uploadFileResponse, deleteFileResponse]);
+  }, [uploadFileResponse, deleteFileResponse, deleteFolderResponse]);
 
   return (
     <>
       <section className='flex flex-col justify-center items-center gap-4 mx-5 my-10'>
         <h2>My Files</h2>
+        <div>
+          <button className='btn btn-error' onClick={() => deleteAllFiles()}>
+            Delete all files
+          </button>
+        </div>
         {getFilesResponse?.data.length === 0 && <p>- no files available -</p>}
         <div>
           <ul>

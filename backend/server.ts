@@ -1,6 +1,6 @@
 import { log } from 'console';
 import app from './app';
-import { dbConnect } from './src/config/storage.config';
+import { dbConnect } from './src/storage/storage.config';
 import 'dotenv/config';
 import path from 'path';
 

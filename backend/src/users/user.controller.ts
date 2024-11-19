@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Qrcode } from '../qrcodes/qrcode.model';
 import { User } from './user.model';
-import { destroyFile, uploadFile } from '../storage.service';
+import { destroyFile, uploadFile, deleteFolder } from '../storage/storage.service';
 import type { UploadApiOptions } from 'cloudinary';
 
 export async function getUserQrcodes(req: Request, res: Response): Promise<void> {
@@ -129,6 +129,61 @@ export async function deleteFile(req: Request, res: Response): Promise<void> {
 
     console.log('❎ file deleted from db');
     res.status(200).json({ success: true, message: 'file deleted from db', details: cloudinaryResponse });
+  } catch (error) {
+    console.log(error);
+    res.status(500).end();
+  }
+}
+
+export async function deleteAllFiles(req: Request, res: Response): Promise<void> {
+  const { user, email } = req.payload;
+
+  const prefix = `qr-codes/${email}/`;
+  console.log({ prefix });
+
+  try {
+    const cloudinaryResult = await deleteFolder(prefix);
+    console.log({
+      'deleted files': {
+        img: cloudinaryResult.imgResult.deleted,
+        raw: cloudinaryResult.rawResult.deleted,
+      },
+    });
+
+    const cloudinaryResponse =
+      Object.keys(cloudinaryResult.imgResult.deleted).length === 0 &&
+      Object.keys(cloudinaryResult.rawResult.deleted).length === 0
+        ? '⚠️ cloudinary folder not deleted'
+        : '❎ cloudinary folder deleted';
+    console.log({ cloudinaryResponse });
+
+    const dbResult = await User.updateOne(
+      { _id: user },
+      {
+        $pull: {
+          files: {},
+        },
+      }
+    );
+    console.log({ dbResult });
+
+    if (dbResult.modifiedCount === 0) {
+      res.status(404).json({ success: false, message: 'db delete error' });
+      return;
+    }
+
+    console.log('❎ folder deleted from db');
+    res.status(200).json({
+      success: true,
+      message: 'folder deleted from db',
+      details: {
+        cloudinaryResponse,
+        deletedCount: {
+          img: Object.keys(cloudinaryResult.imgResult.deleted).length,
+          raw: Object.keys(cloudinaryResult.rawResult.deleted).length,
+        },
+      },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).end();

@@ -3,8 +3,8 @@ import { Request, Response } from 'express';
 import QrCode from 'qrcode';
 import { v4 } from 'uuid';
 import { createSalt, createHash, createNumericalCode } from '../auth/auth.service';
-import { sendEmail } from '../config/email.config';
-import { verifyTemplate, filesTemplate } from '../templates/email.template';
+import { sendEmail } from '../email/email.config';
+import { verifyTemplate, filesTemplate } from '../email/email.template';
 import { User } from '../users/user.model';
 
 export async function createQrcode(req: Request, res: Response): Promise<void> {
