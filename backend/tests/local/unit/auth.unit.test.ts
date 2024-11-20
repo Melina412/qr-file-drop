@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { createToken, createHash, createSalt, verifyToken } from '../../src/auth/auth.service';
+import { createToken, createHash, createSalt, verifyToken } from '../../../src/auth/auth.service';
 
 process.env.JWT_SECRET = 'secret';
 

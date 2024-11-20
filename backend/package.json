@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
-    "test": "vitest",
-    "test:report": "vitest run --reporter verbose",
-    "test:ui": "vitest run --ui",
-    "test:coverage": "vitest run --coverage",
-    "test:unit": "vitest run './tests/unit'",
+    "test": "vitest './tests/local'",
+    "test:report": "vitest run './tests/local' --reporter verbose",
+    "test:ui": "vitest run './tests/local --ui",
+    "test:coverage": "vitest run './tests/local --coverage",
+    "test:remote": "vitest run './tests/remote'",
+    "test:remote:unit": "vitest run './tests/remote/unit'",
     "dev": "nodemon",
     "build": "tsc",
     "start": "node dist/server.js"

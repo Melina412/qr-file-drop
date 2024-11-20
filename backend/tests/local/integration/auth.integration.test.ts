@@ -2,9 +2,9 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import request from 'supertest';
 import 'dotenv/config';
 
-import app from '../../app';
-import { User } from '../../src/users/user.model';
-import { createSalt, createHash } from '../../src/auth/auth.service'; // muss das drin bleiben??
+import app from '../../../app';
+import { User } from '../../../src/users/user.model';
+import { createSalt, createHash } from '../../../src/auth/auth.service'; // muss das drin bleiben??
 
 process.env.JWT_SECRET = 'secret';
 

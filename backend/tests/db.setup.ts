@@ -1,8 +1,9 @@
 import { beforeAll, afterAll, beforeEach, afterEach, vi } from 'vitest';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { User } from '../../src/users/user.model';
-import { createSalt, createHash } from '../../src/auth/auth.service';
+import { User } from '../src/users/user.model';
+import { createSalt, createHash } from '../src/auth/auth.service';
+import 'dotenv/config';
 
 let mongoServer: MongoMemoryServer;
 
@@ -68,5 +69,6 @@ beforeAll(() => {
     };
   });
 
+  //! mocking ohne den actualImport funktioniert (noch) nicht leider also muss ich die remote tests für die cloudinary operationen vorerst aussetzen
   console.log('🔹 mocking cloudinary API');
 });
