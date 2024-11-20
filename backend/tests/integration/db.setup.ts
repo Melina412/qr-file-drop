@@ -1,4 +1,4 @@
-import { beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
+import { beforeAll, afterAll, beforeEach, afterEach, vi } from 'vitest';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { User } from '../../src/users/user.model';
@@ -38,4 +38,35 @@ beforeEach(async () => {
 afterEach(async () => {
   await User.deleteMany({});
   // console.log('🔸 testuser deleted');
+});
+
+beforeAll(() => {
+  vi.mock('cloudinary', async () => {
+    const actual = await vi.importActual('cloudinary');
+    return {
+      ...actual,
+      v2: {
+        ...(actual.v2 as object),
+        api: {
+          delete_resources_by_prefix: vi.fn().mockResolvedValue({
+            deleted: { 'test-file-id': 'deleted' },
+            deleted_counts: { raw: 1 },
+          }),
+        },
+        uploader: {
+          upload: vi.fn().mockResolvedValue({
+            success: true,
+            fileID: 'mocked-file-id',
+            fileURL: 'https://mocked.cloudinary.com/test-file',
+            fileName: 'mocked-testfile.txt',
+          }),
+          destroy: vi.fn().mockResolvedValue({
+            result: 'ok',
+          }),
+        },
+      },
+    };
+  });
+
+  console.log('🔹 mocking cloudinary API');
 });
