@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import type { File, ResponseType } from '../../types';
+import type { FileType, ResponseType } from '../../types';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 
 function Files() {
   const [fileResponse, setFileResponse] = useState<ResponseType>(null);
   const [mailResponse, setMailResponse] = useState<ResponseType>(null);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<FileType | null>(null);
   console.log({ file });
   console.log({ fileResponse });
   console.log({ mailResponse });

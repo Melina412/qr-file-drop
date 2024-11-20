@@ -35,7 +35,11 @@ export type QrCodeData = { dataURL: string; expiresAt: number; slug: string } | 
 
 export type ResponseType = { success: boolean; message: string; data?: any } | null;
 
-export type File = {
+export type FileType = {
   fileURL: string;
   fileID: string;
+  fileName: string;
+  resourceType: 'raw' | 'auto' | 'image' | 'video';
+  format: string;
+  _id: string;
 };

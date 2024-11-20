@@ -8,3 +8,16 @@ declare global {
     }
   }
 }
+
+export interface DestroyFileResponse {
+  result: string;
+}
+
+export interface DeleteResourcesByPrefixResponse {
+  deleted: Object;
+  deleted_counts: Object;
+  partial: Boolean;
+  rate_limit_allowed: number;
+  rate_limit_reset_at: Date;
+  rate_limit_remaining: number;
+}
