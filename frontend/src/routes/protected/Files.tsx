@@ -6,8 +6,8 @@ import Header from '../../components/Header';
 function Files() {
   const [fileResponse, setFileResponse] = useState<ResponseType>(null);
   const [mailResponse, setMailResponse] = useState<ResponseType>(null);
-  const [file, setFile] = useState<FileType | null>(null);
-  console.log({ file });
+  const [files, setFiles] = useState<FileType[] | null>(null);
+  console.log({ files });
   console.log({ fileResponse });
   console.log({ mailResponse });
 
@@ -19,7 +19,7 @@ function Files() {
     const response = await res.json();
 
     setFileResponse(response);
-    setFile(response.data.files[0]);
+    setFiles(response.data.files);
   }
 
   useEffect(() => {
@@ -53,16 +53,18 @@ function Files() {
         <div className='flex flex-col justify-center items-center mx-5 my-10 gap-5'>
           <h1>You can now download the files below</h1>
           <ul className='menu bg-base-200 rounded-box w-56 mb-10'>
-            <li>
-              <Link
-                to={`${file?.fileURL}?attachment=false`}
-                target='_blank'
-                download='CV.pdf'
-                className='link link-accent link-hover'>
-                CV.pdf
-              </Link>
-              {/* download name muss ggf. im be festgelegt werden, sonst ist hier trotzdem die cloudinary id */}
-            </li>
+            {files?.map((file) => (
+              <li key={file?._id}>
+                <Link
+                  to={`${file?.fileURL}?attachment=false`}
+                  target='_blank'
+                  download='file'
+                  className='link link-accent link-hover'>
+                  {file?.fileName}.{file?.format}
+                </Link>
+                {/* download name muss ggf. im be festgelegt werden, sonst ist hier trotzdem die cloudinary id */}
+              </li>
+            ))}
           </ul>
           <div className='flex flex-col justify-center items-center'>
             {!mailResponse?.success === true ? (

@@ -1,20 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
-import type { ResponseType, FileType } from '../types';
+import type { FileType, FileUploadProps } from '../types';
 import { Link } from 'react-router-dom';
 import authFetch from '../utils/authFetch';
 
-function FileUpload() {
+function FileUpload({
+  setUploadFileResponse,
+  setDeleteFileResponse,
+  setDeleteFolderResponse,
+  getFilesResponse,
+  uploadFileResponse,
+}: FileUploadProps) {
   const [inputFile, setInputFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>('');
-  const [uploadFileResponse, setUploadFileResponse] = useState<ResponseType>(null);
-  const [getFilesResponse, setGetFilesResponse] = useState<ResponseType>(null);
-  const [deleteFileResponse, setDeleteFileResponse] = useState<ResponseType>(null);
-  const [deleteFolderResponse, setDeleteFolderResponse] = useState<ResponseType>(null);
-  console.log({ uploadFileResponse });
-  console.log({ getFilesResponse });
-  console.log({ deleteFileResponse });
-  console.log({ deleteFolderResponse });
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files !== null) {
@@ -82,23 +80,6 @@ function FileUpload() {
       console.error(error);
     }
   }
-
-  useEffect(() => {
-    async function getUserFiles() {
-      try {
-        const res = await authFetch(`${import.meta.env.VITE_BACKENDURL}/api/user/files`, {
-          method: 'GET',
-          credentials: 'include',
-        });
-
-        const response = await res.json();
-        setGetFilesResponse(response);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    getUserFiles();
-  }, [uploadFileResponse, deleteFileResponse, deleteFolderResponse]);
 
   return (
     <>

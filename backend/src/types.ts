@@ -21,3 +21,12 @@ export interface DeleteResourcesByPrefixResponse {
   rate_limit_reset_at: Date;
   rate_limit_remaining: number;
 }
+
+export type FileType = {
+  fileURL: string;
+  fileID: string;
+  fileName: string;
+  resourceType: 'raw' | 'auto' | 'image' | 'video';
+  format: string;
+  _id: string;
+};
