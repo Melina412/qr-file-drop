@@ -43,3 +43,15 @@ export type FileType = {
   format: string;
   _id: string;
 };
+
+export interface FileUploadProps {
+  setUploadFileResponse: Dispatch<SetStateAction<ResponseType>>;
+  setDeleteFileResponse: Dispatch<SetStateAction<ResponseType>>;
+  setDeleteFolderResponse: Dispatch<SetStateAction<ResponseType>>;
+  getFilesResponse: ResponseType;
+  uploadFileResponse: ResponseType;
+}
+
+export interface GenerateCodeProps {
+  getFilesResponse: ResponseType;
+}

@@ -15,7 +15,7 @@ import NotFound from './routes/NotFound';
 
 function App() {
   const [login, setLogin] = useState(false);
-  console.log({ login });
+  // console.log({ login });
   return (
     <>
       <ErrorBoundary FallbackComponent={Fallback}>

@@ -135,7 +135,7 @@ export async function verifyPin(req: Request, res: Response): Promise<void> {
     console.log('qrcode.pin', qrcode.pin);
 
     if (enteredPin === qrcode.pin) {
-      const payload = { slug: slug, user_id: qrcode.user, scannedBy: qrcode.scannedBy };
+      const payload = { slug: slug, user_id: qrcode.user, file: qrcode.file, scannedBy: qrcode.scannedBy };
       const qrCodeToken = createToken(payload, '30min');
       //# cookies -----------------------------------------------------------
       res
@@ -145,7 +145,11 @@ export async function verifyPin(req: Request, res: Response): Promise<void> {
           secure: true, //! secure für safari test rausnehmen
           // sameSite: 'none',
         })
-        .json({ success: true, message: 'pin correct', data: { user_id: qrcode.user, scannedBy: qrcode.scannedBy } });
+        .json({
+          success: true,
+          message: 'pin correct',
+          data: { user_id: qrcode.user, file: qrcode.file, scannedBy: qrcode.scannedBy },
+        });
     } else {
       res.status(404).json({ success: false, message: 'something went wrong' });
     }

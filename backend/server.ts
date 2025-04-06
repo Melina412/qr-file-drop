@@ -11,7 +11,7 @@ const directory = __dirname;
 
 // console.log({ PROJECT_ROOT });
 // console.log({ directory });
-// console.log('NODE_ENV', process.env.NODE_ENV);
+console.log('NODE_ENV', process.env.NODE_ENV);
 
 const FRONTEND_INDEX = path.join(__dirname, '../../frontend/dist/index.html');
 

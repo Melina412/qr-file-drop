@@ -10,6 +10,9 @@ const qrcodeSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
   },
+  file: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
   slug: {
     type: String,
     required: true,

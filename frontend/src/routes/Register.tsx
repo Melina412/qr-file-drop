@@ -13,7 +13,7 @@ function Register() {
       email: emailRef.current?.value,
       password: passwordRef.current?.value,
     };
-    console.log({ user });
+    // console.log({ user });
 
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/api/auth/register`, {

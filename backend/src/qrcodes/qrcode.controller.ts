@@ -6,9 +6,15 @@ import { createSalt, createHash, createNumericalCode } from '../auth/auth.servic
 import { sendEmail } from '../email/email.config';
 import { verifyTemplate, filesTemplate } from '../email/email.template';
 import { User } from '../users/user.model';
+import type { FileType } from 'types';
 
 export async function createQrcode(req: Request, res: Response): Promise<void> {
-  const { count, pincode, expiresIn } = req.body as { count: number; pincode: boolean; expiresIn: number };
+  const { file, count, pincode, expiresIn } = req.body as {
+    file: FileType;
+    count: number;
+    pincode: boolean;
+    expiresIn: number;
+  };
   // count: zeit im minuten
   //   console.log({ req });
 
@@ -31,6 +37,7 @@ export async function createQrcode(req: Request, res: Response): Promise<void> {
     const qrcode = new Qrcode({
       dataURL,
       user: req.payload.user,
+      file: file._id,
       slug,
       salt,
       expiresAt,
@@ -89,7 +96,7 @@ export async function verifyEmail(req: Request, res: Response): Promise<void> {
   try {
     const qrcode = await Qrcode.findOne({ slug });
 
-    console.log({ qrcode });
+    console.log('QRCODE:', qrcode);
     if (!qrcode) {
       res.status(404).json({ success: false, message: 'qrcode not found' });
       return;
@@ -126,6 +133,7 @@ export async function verifyEmail(req: Request, res: Response): Promise<void> {
 
 export async function getFile(req: Request, res: Response): Promise<void> {
   console.log('payload', req.payload);
+  // const { slug } = req.params;
 
   try {
     const user = await User.findById(req.payload.user_id);
@@ -135,14 +143,17 @@ export async function getFile(req: Request, res: Response): Promise<void> {
       res.status(404).json({ success: false, message: 'user not found' });
       return;
     }
-    const files = user.files;
-    if (!files) {
+    if (!user.files) {
       res.status(404).json({ success: false, message: 'files not found' });
       return;
     }
+    const selectedFile = user?.files.id(req.payload.file);
+    console.log('selectedFile', selectedFile);
+    // ! hier evtl. noch eine methode einbauen, bei der user mehr als eine file teilen können
+
     res
       .status(200)
-      .json({ success: true, message: 'files sent', data: { files: files, email: req.payload.scannedBy } });
+      .json({ success: true, message: 'files sent', data: { files: [selectedFile], email: req.payload.scannedBy } });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'something went wrong' });
@@ -160,13 +171,13 @@ export async function sendFiles(req: Request, res: Response): Promise<void> {
       res.status(404).json({ success: false, message: 'user not found' });
       return;
     }
-    const files = user.files;
-    if (!files) {
+    if (!user.files) {
       res.status(404).json({ success: false, message: 'files not found' });
       return;
     }
+    const selectedFile = user?.files.id(req.payload.file);
 
-    sendEmail(filesTemplate(req.payload.scannedBy, files[0].fileName, files[0].fileURL));
+    sendEmail(filesTemplate(req.payload.scannedBy, selectedFile.fileName, selectedFile.fileURL));
     res.status(200).json({ success: true, message: 'files sent' });
   } catch (error) {
     console.error(error);

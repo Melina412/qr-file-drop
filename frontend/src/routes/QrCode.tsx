@@ -17,7 +17,7 @@ function QrCode() {
   const [loading, setLoading] = useState(true);
   const [emailSent, setEmailSent] = useState(false);
 
-  console.log({ verified }, { loading }, { emailSent });
+  // console.log({ verified }, { loading }, { emailSent });
 
   return (
     <>

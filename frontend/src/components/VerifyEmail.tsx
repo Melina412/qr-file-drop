@@ -3,7 +3,7 @@ import type { VerifyEmailProps } from '../types';
 
 function VerifyEmail({ setEmailSent, response, setResponse, slug }: VerifyEmailProps) {
   const emailRef = useRef<HTMLInputElement>(null);
-  console.log({ response });
+  // console.log({ response });
   const [buttonClicked, setButtonClicked] = useState<boolean>(false);
 
   async function verifyEmail() {
