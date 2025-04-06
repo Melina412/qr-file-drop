@@ -28,10 +28,10 @@ function UserDashboard({ setLogin }: DashboardProps) {
     getUserFiles();
   }, [uploadFileResponse, deleteFileResponse, deleteFolderResponse]);
 
-  console.log({ uploadFileResponse });
-  console.log({ getFilesResponse });
-  console.log({ deleteFileResponse });
-  console.log({ deleteFolderResponse });
+  // console.log({ uploadFileResponse });
+  // console.log({ getFilesResponse });
+  // console.log({ deleteFileResponse });
+  // console.log({ deleteFolderResponse });
 
   return (
     <>

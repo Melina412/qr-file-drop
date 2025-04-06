@@ -16,9 +16,9 @@ function FileUpload({
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files !== null) {
-      console.log(e.target.files);
-      console.log(e.target.files[0]);
-      console.log(e.target);
+      // console.log(e.target.files);
+      // console.log(e.target.files[0]);
+      // console.log(e.target);
     }
 
     if (e.target.files !== null) setInputFile(e.target.files[0]);
@@ -28,7 +28,7 @@ function FileUpload({
     e.preventDefault();
 
     const form = new FormData();
-    console.log(form);
+    // console.log(form);
     // console.log({ form });
 
     if (inputFile) {

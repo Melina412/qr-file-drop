@@ -5,21 +5,21 @@ function DashboardProtector() {
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  console.log({ authorized }, { loading });
+  // console.log({ authorized }, { loading });
 
   //$ refreshToken() ---------------------------------------------------
 
   async function refreshToken() {
     try {
-      console.log('attempting to refresh token...');
+      // console.log('attempting to refresh token...');
       const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/api/auth/refresh`, {
         credentials: 'include',
       });
       if (response.ok) {
-        console.log('✅ token refreshed successfully!');
+        // console.log('✅ token refreshed successfully!');
         setAuthorized(true);
       } else {
-        console.log('❌ refresh failed:', response.statusText);
+        // console.log('❌ refresh failed:', response.statusText);
         setAuthorized(false);
       }
       setLoading(false);
@@ -38,7 +38,7 @@ function DashboardProtector() {
         });
 
         if (!response.ok) {
-          console.log('access token check failed, trying to refresh...');
+          // console.log('access token check failed, trying to refresh...');
           await refreshToken();
         } else {
           const exp = await response.json();
@@ -48,11 +48,11 @@ function DashboardProtector() {
           // console.log(new Date(expDate).toLocaleString('de-DE'));
 
           if (exp && expDate < now) {
-            console.log('access token expired, refreshing...');
+            // console.log('access token expired, refreshing...');
             setLoading(true);
             await refreshToken();
           } else {
-            console.log('access token is valid');
+            // console.log('access token is valid');
             setAuthorized(true);
           }
         }

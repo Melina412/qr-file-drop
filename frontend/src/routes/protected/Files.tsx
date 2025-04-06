@@ -7,9 +7,9 @@ function Files() {
   const [fileResponse, setFileResponse] = useState<ResponseType>(null);
   const [mailResponse, setMailResponse] = useState<ResponseType>(null);
   const [files, setFiles] = useState<FileType[] | null>(null);
-  console.log({ files });
-  console.log({ fileResponse });
-  console.log({ mailResponse });
+  // console.log({ files });
+  // console.log({ fileResponse });
+  // console.log({ mailResponse });
 
   async function getFile() {
     const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/api/qrcode/file`, {
@@ -36,7 +36,7 @@ function Files() {
         },
       });
       const response = await res.json();
-      console.log(response);
+      // console.log(response);
 
       if (res.ok) {
         setMailResponse(response);

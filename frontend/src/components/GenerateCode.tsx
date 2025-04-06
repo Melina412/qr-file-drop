@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function GenerateCode({ getFilesResponse }: GenerateCodeProps) {
   const [data, setData] = useState<QrCodeData>(null);
-  console.log({ data });
+  // console.log({ data });
   const [availableFiles, setAvailableFiles] = useState<FileType[]>(
     getFilesResponse ? getFilesResponse.data.map((file: FileType) => file) : []
   );
@@ -14,10 +14,10 @@ function GenerateCode({ getFilesResponse }: GenerateCodeProps) {
   useEffect(() => {
     setAvailableFiles(getFilesResponse ? getFilesResponse.data.map((file: FileType) => file) : []);
   }, [getFilesResponse]);
-  console.log({ availableFiles });
-  console.log({ getFilesResponse });
-  console.log({ selectedFile });
-  console.log({ selectedDuration });
+  // console.log({ availableFiles });
+  // console.log({ getFilesResponse });
+  // console.log({ selectedFile });
+  // console.log({ selectedDuration });
 
   async function generateQrCOde() {
     const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/api/qrcode`, {
