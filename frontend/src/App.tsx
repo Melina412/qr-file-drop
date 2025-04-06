@@ -22,7 +22,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Landingpage />} />
-            <Route path='/login' element={<Login setLogin={setLogin} />} />
+            <Route path='/login' element={<Login login={login} setLogin={setLogin} />} />
             <Route path='/register' element={<Register />} />
             <Route path='/qr-code/:id' element={<QrCode />} />
             <Route element={<DashboardProtector />}>
